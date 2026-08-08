@@ -1,0 +1,28 @@
+#DEFINING THE VPCS AS REPRESENTATIONS OF SEGMENTED BUSINESS FUNCTIONS
+#Clinical Systems VPC EHR, PACS, FHIR APIs, patient portals
+#ealthcare Analytics VPC: Data warehouse, BI dashboards, AI/ML, population health analytics
+#Administrative Services VPC: HR, payroll, finance, Active Directory, internal applications
+#Ensure CIDR ranges do not overlap
+#Non-overlapping address ranges will be important later when we connect the VPCs through VPC peering or Transit Gateway
+
+aws_region = "us-east-1"
+
+hospital_vpcs = {
+  clinical = {
+    cidr_block  = "10.0.0.0/16"
+    environment = "Production"
+    purpose     = "Clinical Systems"
+  }
+
+  analytics = {
+    cidr_block  = "10.1.0.0/16"
+    environment = "Production"
+    purpose     = "Healthcare Analytics"
+  }
+
+  admin = {
+    cidr_block  = "10.2.0.0/16"
+    environment = "Production"
+    purpose     = "Administrative Services"
+  }
+}
