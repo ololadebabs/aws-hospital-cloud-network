@@ -69,3 +69,7 @@ While pushing the local Terraform project to GitHub, I encountered a Git reposit
 ## Security Notice
 This project uses fictional infrastructure and does not contain real patient
 information, protected health information, or production credentials.
+
+
+## SUMMARY AFTER PHASE 2
+create subnet folder, then add subnet configurations

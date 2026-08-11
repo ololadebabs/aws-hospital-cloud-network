@@ -31,3 +31,26 @@ output "hospital_vpc_details" {
     }
   }
 }
+
+output "hospital_subnet_ids" {
+  description = "IDs of the hospital subnets"
+
+  value = {
+    for name, subnet in aws_subnet.hospital :
+    name => subnet.id
+  }
+}
+
+output "hospital_subnet_details" {
+  description = "Details of the hospital subnets"
+
+  value = {
+    for name, subnet in aws_subnet.hospital :
+    name => {
+      subnet_id         = subnet.id
+      cidr_block        = subnet.cidr_block
+      availability_zone = subnet.availability_zone
+      vpc_id            = subnet.vpc_id
+    }
+  }
+}
