@@ -54,3 +54,13 @@ output "hospital_subnet_details" {
     }
   }
 }
+
+#creates an output that displays the IDs of all the Internet Gateways (IGWs) created for hospital VPCs, organized by their names
+output "hospital_internet_gateway_ids" {
+  description = "IDs of the hospital Internet Gateways"
+
+  value = {
+    for name, igw in aws_internet_gateway.hospital :
+    name => igw.id
+  }
+}
