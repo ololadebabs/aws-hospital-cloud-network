@@ -77,3 +77,28 @@
  #Updating Route Tables
  #updating all three VPC route tables with a default route pointing at each VPC's Internet Gateway
 
+ ## Summary of Phase 5
+  #Deploy EC2 Instances in the VPCs
+  #Objective
+  #The objective of this task is to deploy one Amazon EC2 instance in each of the three hospital VPCs.
+  #The EC2 instances will later be used to test private network communication between the VPCs and demonstrate that separate VPCs are isolated by default.
+  #For the hospital infrastructure project, the three environments are: Clinical, Analytics and Admin 
+  #VPC CIDR are 10.0.0.0/16, 10.1.0.0/16 and 10.2.0.0/16 respectively
+  #The project deploys each EC2 instance into the AZ1 subnet of its respective VPC, following the lab's one-instance-per-VPC architecture.
+  #The ec2 subnets are names clinical-az1, analytics-az1 and admin-az1 
+  #The ec2 instances are hospital-clinical-ec2, hospital-analytics-ec2 and hospital-admin-ec2 respectively
+  #Each ec2 instance is configured with: Operating System: Amazon Linux 2023
+    #Instance Type: t2.micro
+    #Public IPv4 Address: Enabled
+    #SSH Access: Not configured
+    #Remote Management: AWS Systems Manager Session Manager
+    #Security Group: Allows ICMP traffic from 10.0.0.0/8
+ #Skills Demonstrated: 
+    #Amazon EC2 deployment, Amazon Linux 2023, AWS VPC networking, Multi-VPC architecture, AWS CLI resource verification,
+    #Terraform data sources, EC2 security groups, IAM roles and instance profiles, AWS Systems Manager Session Manager, 
+    #Terraform Infrastructure as Code, Terraform outputs, Terraform for_each, ICMP network configuration
+ #Task Outcome:
+    #Three EC2 instances are deployed, One EC2 instance exists in each hospital VPC, Each instance is deployed into its respective AZ1 subnet
+    #ICMP traffic from the hospital private network range is permitted by the EC2 security groups
+    #AWS Systems Manager access is configured without requiring SSH, Terraform outputs provide the instance IDs and private/public IP addresses
+    #The three VPCs remain isolated from each other, preparing the environment for connectivity testing

@@ -64,3 +64,31 @@ output "hospital_internet_gateway_ids" {
     name => igw.id
   }
 }
+
+# To easily see the IDs and IP addresses of the three EC2 instances after Terraform creates them
+output "hospital_ec2_instance_ids" {
+  description = "IDs of the hospital EC2 instances"
+
+  value = {
+    for name, instance in aws_instance.hospital :
+    name => instance.id
+  }
+}
+
+output "hospital_ec2_private_ips" {
+  description = "Private IP addresses of the hospital EC2 instances"
+
+  value = {
+    for name, instance in aws_instance.hospital :
+    name => instance.private_ip
+  }
+}
+
+output "hospital_ec2_public_ips" {
+  description = "Public IP addresses of the hospital EC2 instances"
+
+  value = {
+    for name, instance in aws_instance.hospital :
+    name => instance.public_ip
+  }
+}
