@@ -27,7 +27,7 @@ resource "aws_instance" "hospital" {
   instance_type = "t2.micro"
 
   subnet_id = aws_subnet.hospital[each.value.subnet_key].id
-  
+
   associate_public_ip_address = true #enables auto-assign public ip
 
   vpc_security_group_ids = [

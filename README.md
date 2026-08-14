@@ -102,3 +102,12 @@
     #ICMP traffic from the hospital private network range is permitted by the EC2 security groups
     #AWS Systems Manager access is configured without requiring SSH, Terraform outputs provide the instance IDs and private/public IP addresses
     #The three VPCs remain isolated from each other, preparing the environment for connectivity testing
+
+## Summary of Phase 5
+ #The goal is to prove that the three EC2 instances/servers in separate VPCs CANNOT COMMUNICATE WITH ONE ANOTHER YET. This will help to demonstrate
+ #VPC isolation by default(i.e. no inter-VPC routing mechanism)
+
+
+ ## Summary of Phase 5
+  #We set up VPC Peering to establish connection between isolated VPCs privately over AWS networking infrastructure
+
