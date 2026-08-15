@@ -18,6 +18,22 @@ resource "aws_route" "internet" {
   gateway_id             = aws_internet_gateway.hospital[each.key].id
 }
 
+#Transit gateway routes
+resource "aws_route" "transit_gateway" {
+  for_each = var.hospital_vpcs
+
+  route_table_id         = aws_vpc.hospital[each.key].default_route_table_id
+  destination_cidr_block = "10.0.0.0/8"
+  transit_gateway_id     = aws_ec2_transit_gateway.hospital.id
+
+  depends_on = [
+    aws_ec2_transit_gateway_vpc_attachment.clinical,
+    aws_ec2_transit_gateway_vpc_attachment.analytics,
+    aws_ec2_transit_gateway_vpc_attachment.admin
+  ]
+}
+
+/*
 #peering route tables
 resource "aws_route" "clinical_to_analytics" {
   route_table_id            = aws_vpc.hospital["clinical"].default_route_table_id
@@ -42,4 +58,5 @@ resource "aws_route" "admin_to_clinical" {
   destination_cidr_block    = "10.0.0.0/16"
   vpc_peering_connection_id = aws_vpc_peering_connection.clinical_admin.id
 }
+*/
 

@@ -1,3 +1,4 @@
+/*
 # Secure Hospital Cloud Network
 # AWS Hospital Infrastructure
 # This project demonstrates the design and deployment of a secure, scalable AWS cloud infrastructure for a hospital environment using Terraform Infrastructure as Code (IaC).
@@ -59,55 +60,66 @@
 #-  Git repository created
 #-  VPC design and setup completed
 
-## Professional Challenges Encountered
-#While pushing the local Terraform project to GitHub, I encountered a Git repository synchronization issue because the remote repository had been initialized with a README, LICENSE, and .gitignore, creating a conflicting commit history. I resolved the issue by creating a new empty repository and successfully pushing the project, reinforcing my understanding of Git version control and repository management.
+ Professional Challenges Encountered
+ While pushing the local Terraform project to GitHub, I encountered a Git repository synchronization issue because the remote repository had been initialized with a README, LICENSE, and .gitignore, creating a conflicting commit history. I resolved the issue by creating a new empty repository and successfully pushing the project, reinforcing my understanding of Git version control and repository management.
 
 
-## Summary of Phase 2
- # Create subnet folder, then created subnet configurations
-# Configured Internet Gateway
+ Summary of Phase 2
+  Create subnet folder, then created subnet configurations
+  Configured Internet Gateway
 
 
+ Summary of Phase 3
+  Create and attach Igw
+  One important point: creating and attaching an Internet Gateway does not automatically make your subnets internet-accessible. You still need routes such as 0.0.0.0/0 → IGW in the appropriate route tables.
 
-## Summary of Phase 3
- # Create and attach Igw
- #One important point: creating and attaching an Internet Gateway does not automatically make your subnets internet-accessible. You still need routes such as 0.0.0.0/0 → IGW in the appropriate route tables.
+ Summary of Phase 4
+  Updating Route Tables
+  updating all three VPC route tables with a default route pointing at each VPC's Internet Gateway
 
-## Summary of Phase 4
- #Updating Route Tables
- #updating all three VPC route tables with a default route pointing at each VPC's Internet Gateway
+ Summary of Phase 5
+  Deploy EC2 Instances in the VPCs
+  Objective
+  The objective of this task is to deploy one Amazon EC2 instance in each of the three hospital VPCs.
+  The EC2 instances will later be used to test private network communication between the VPCs and demonstrate that separate VPCs are isolated by default.
+  For the hospital infrastructure project, the three environments are: Clinical, Analytics and Admin 
+  VPC CIDR are 10.0.0.0/16, 10.1.0.0/16 and 10.2.0.0/16 respectively
+  The project deploys each EC2 instance into the AZ1 subnet of its respective VPC, following the lab's one-instance-per-VPC architecture.
+  The ec2 subnets are names clinical-az1, analytics-az1 and admin-az1 
+  The ec2 instances are hospital-clinical-ec2, hospital-analytics-ec2 and hospital-admin-ec2 respectively
+ Each ec2 instance is configured with: Operating System: Amazon Linux 2023
+    Instance Type: t2.micro
+    Public IPv4 Address: Enabled
+    SSH Access: Not configured
+    Remote Management: AWS Systems Manager Session Manager
+    Security Group: Allows ICMP traffic from 10.0.0.0/8
+ Skills Demonstrated: 
+    Amazon EC2 deployment, Amazon Linux 2023, AWS VPC networking, Multi-VPC architecture, AWS CLI resource verification,
+    Terraform data sources, EC2 security groups, IAM roles and instance profiles, AWS Systems Manager Session Manager, 
+    Terraform Infrastructure as Code, Terraform outputs, Terraform for_each, ICMP network configuration
+ Task Outcome:
+    Three EC2 instances are deployed, One EC2 instance exists in each hospital VPC, Each instance is deployed into its respective AZ1 subnet
+    ICMP traffic from the hospital private network range is permitted by the EC2 security groups
+    AWS Systems Manager access is configured without requiring SSH, Terraform outputs provide the instance IDs and private/public IP addresses
+    The three VPCs remain isolated from each other, preparing the environment for connectivity testing
 
- ## Summary of Phase 5
-  #Deploy EC2 Instances in the VPCs
-  #Objective
-  #The objective of this task is to deploy one Amazon EC2 instance in each of the three hospital VPCs.
-  #The EC2 instances will later be used to test private network communication between the VPCs and demonstrate that separate VPCs are isolated by default.
-  #For the hospital infrastructure project, the three environments are: Clinical, Analytics and Admin 
-  #VPC CIDR are 10.0.0.0/16, 10.1.0.0/16 and 10.2.0.0/16 respectively
-  #The project deploys each EC2 instance into the AZ1 subnet of its respective VPC, following the lab's one-instance-per-VPC architecture.
-  #The ec2 subnets are names clinical-az1, analytics-az1 and admin-az1 
-  #The ec2 instances are hospital-clinical-ec2, hospital-analytics-ec2 and hospital-admin-ec2 respectively
-  #Each ec2 instance is configured with: Operating System: Amazon Linux 2023
-    #Instance Type: t2.micro
-    #Public IPv4 Address: Enabled
-    #SSH Access: Not configured
-    #Remote Management: AWS Systems Manager Session Manager
-    #Security Group: Allows ICMP traffic from 10.0.0.0/8
- #Skills Demonstrated: 
-    #Amazon EC2 deployment, Amazon Linux 2023, AWS VPC networking, Multi-VPC architecture, AWS CLI resource verification,
-    #Terraform data sources, EC2 security groups, IAM roles and instance profiles, AWS Systems Manager Session Manager, 
-    #Terraform Infrastructure as Code, Terraform outputs, Terraform for_each, ICMP network configuration
- #Task Outcome:
-    #Three EC2 instances are deployed, One EC2 instance exists in each hospital VPC, Each instance is deployed into its respective AZ1 subnet
-    #ICMP traffic from the hospital private network range is permitted by the EC2 security groups
-    #AWS Systems Manager access is configured without requiring SSH, Terraform outputs provide the instance IDs and private/public IP addresses
-    #The three VPCs remain isolated from each other, preparing the environment for connectivity testing
-
-## Summary of Phase 5
- #The goal is to prove that the three EC2 instances/servers in separate VPCs CANNOT COMMUNICATE WITH ONE ANOTHER YET. This will help to demonstrate
- #VPC isolation by default(i.e. no inter-VPC routing mechanism)
+ Summary of Phase 5
+ The goal is to prove that the three EC2 instances/servers in separate VPCs CANNOT COMMUNICATE WITH ONE ANOTHER YET. This will help to demonstrate
+ VPC isolation by default(i.e. no inter-VPC routing mechanism)
 
 
- ## Summary of Phase 5
-  #We set up VPC Peering to establish connection between isolated VPCs privately over AWS networking infrastructure
+ Summary of Phase 5
+ We set up VPC Peering to establish connection between isolated VPCs privately over AWS networking infrastructure
 
+ Summary of Phase 6
+ In the previous phase, VPC Peering Links were created in order to facilitate connectivity between the VPCs, without sending that traffic over the public
+ internet. While this approach can be used to interconnect many VPCs, managing many point-to-point connections can be cumbersome as the number of VPCs to
+ connect grows. A more scalable approach is to utilize AWS Transit Gateway.  
+ 
+ In this phase the point-to-point VPC peering design is replaced with AWS Transit Gateway(TGW) so that Clinical, Analytics and Admin EC2s can all communicate
+ through a central hub instead of maintaing multiple peering links. It is also called hub-and-spoke network architecture
+ The existing peering connections are removed, a Transit Gateway created, attach all three VPCs, confirm the TGW route table, and then update each VPC route table to point to the TGW
+  
+
+
+*/
